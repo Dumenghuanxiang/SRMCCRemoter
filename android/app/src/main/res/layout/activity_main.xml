@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+    <com.example.srmremoter.GamepadView
+        android:id="@+id/gamepad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/gamepad_description" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="top"
+        android:layout_marginHorizontal="34dp"
+        android:layout_marginTop="4dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/settingsButton"
+            style="@style/FrostedActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start|center_vertical"
+            android:text="@string/action_settings"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:id="@+id/connectionIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:contentDescription="@string/connection_status_open_settings"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <com.example.srmremoter.StatusLightView
+                android:id="@+id/connectionIndicatorDot"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/connectionStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:maxLines="1"
+                android:text="@string/status_disconnected"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/debugButton"
+            style="@style/FrostedActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="end|center_vertical"
+            android:text="@string/action_debug_send"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="13sp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/switchPanel"
+        android:layout_width="300dp"
+        android:layout_height="116dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/panel_background"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="6dp"
+        android:showDividers="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                style="@style/ControllerSwitchGroup">
+                <TextView style="@style/ControllerSwitchLabel" android:text="@string/switch_1" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch1"
+                    style="@style/ControllerSwitch"
+                    android:contentDescription="@string/switch_1" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ControllerSwitchGroup">
+                <TextView style="@style/ControllerSwitchLabel" android:text="@string/switch_2" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch2"
+                    style="@style/ControllerSwitch"
+                    android:contentDescription="@string/switch_2" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ControllerSwitchGroup">
+                <TextView style="@style/ControllerSwitchLabel" android:text="@string/switch_3" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch3"
+                    style="@style/ControllerSwitch"
+                    android:contentDescription="@string/switch_3" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                style="@style/ControllerSwitchGroup">
+                <TextView style="@style/ControllerSwitchLabel" android:text="@string/switch_4" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch4"
+                    style="@style/ControllerSwitch"
+                    android:contentDescription="@string/switch_4" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ControllerSwitchGroup">
+                <TextView style="@style/ControllerSwitchLabel" android:text="@string/switch_5" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch5"
+                    style="@style/ControllerSwitch"
+                    android:contentDescription="@string/switch_5" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/ControllerSwitchGroup">
+                <TextView style="@style/ControllerSwitchLabel" android:text="@string/switch_6" />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch6"
+                    style="@style/ControllerSwitch"
+                    android:contentDescription="@string/switch_6" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/receivedPanel"
+        android:layout_width="300dp"
+        android:layout_height="64dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="188dp"
+        android:background="@drawable/terminal_panel_background"
+        android:clickable="true"
+        android:contentDescription="@string/debug_log_open"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:elevation="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="monospace"
+                android:text="@string/received_title"
+                android:textColor="@color/terminal_title"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/receivedMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="@color/terminal_muted"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/receivedText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="monospace"
+            android:scrollbars="vertical"
+            android:text="@string/received_empty"
+            android:textColor="@color/terminal_text"
+            android:textIsSelectable="false"
+            android:textSize="11sp"
+            android:maxLines="2" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/commandText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="9dp"
+        android:text="@string/last_command_none"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="11sp" />
+
+</FrameLayout>

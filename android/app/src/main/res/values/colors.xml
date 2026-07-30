@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1967D2</color>
+    <color name="primary_dark">#124D9D</color>
+    <color name="secondary">#2E9B62</color>
+    <color name="background">#E9EDF2</color>
+    <color name="on_surface">#17191D</color>
+    <color name="muted">#68707C</color>
+    <color name="outline">#CED4DC</color>
+    <color name="controller_center">#22252B</color>
+    <color name="white">#FFFFFF</color>
+    <color name="connection_disconnected">#FF3B30</color>
+    <color name="connection_connecting">#29B6F6</color>
+    <color name="connection_connected">#25D366</color>
+    <color name="connection_error">#FFB020</color>
+    <color name="terminal_background_top">#F21C2228</color>
+    <color name="terminal_background_bottom">#F212171C</color>
+    <color name="terminal_outline">#8A50606D</color>
+    <color name="terminal_title">#EBCB72</color>
+    <color name="terminal_text">#9BE5AE</color>
+    <color name="terminal_muted">#A8B2BC</color>
+</resources>

@@ -1,0 +1,51 @@
+<resources>
+    <style name="Theme.SRMRemoter" parent="Theme.Material3.DynamicColors.DayNight">
+        <item name="android:fontFamily">sans</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:windowBackground">?attr/colorSurface</item>
+    </style>
+
+    <style name="ControllerSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="android:layout_width">52dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:enabled">false</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">12sp</item>
+        <item name="thumbTint">@color/controller_switch_thumb_tint</item>
+        <item name="trackTint">@color/controller_switch_track_tint</item>
+    </style>
+
+    <style name="ControllerSwitchLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="FrostedActionButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:alpha">0.94</item>
+        <item name="android:backgroundTint">?attr/colorSurfaceContainerHigh</item>
+        <item name="android:elevation">3dp</item>
+        <item name="android:hapticFeedbackEnabled">true</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="SettingsConfirmIslandButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:backgroundTint">?attr/colorSurfaceContainerHigh</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:hapticFeedbackEnabled">true</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+</resources>

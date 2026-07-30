@@ -1,0 +1,8 @@
+Lcom/example/srmremoter/SRMRemoterApplication;
+Lcom/example/srmremoter/MainActivity;
+Lcom/example/srmremoter/GamepadView;
+Lcom/example/srmremoter/StatusLightView;
+Lcom/example/srmremoter/GamepadRelay;
+Lcom/example/srmremoter/SrmProtocol;
+Lcom/example/srmremoter/BluetoothFfe1Client;
+Lcom/example/srmremoter/BluetoothSppClient;

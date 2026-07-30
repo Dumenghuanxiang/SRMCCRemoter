@@ -1,0 +1,41 @@
+# Operating system and IDE files
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+
+# Secrets and machine-local configuration
+local.properties
+keystore.properties
+*.jks
+*.keystore
+*.pem
+*.key
+*.p12
+*.pfx
+.env
+.env.*
+
+# Android / Gradle
+.gradle/
+.kotlin/
+.android-user-home/
+**/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.egg-info/
+dist/
+runtime/
+
+# Generated reports and captures
+*-report*.json
+control_samples.csv
+serial_report.json
