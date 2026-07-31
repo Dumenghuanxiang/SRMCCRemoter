@@ -1,13 +1,13 @@
 # SRM Remoter
 
 SRM Remoter 是一套基于“SRM 校内赛”V4 通信协议的遥控与中继工具，包含 Android
-蓝牙遥控器、Windows Xbox 手柄中继器、通用 C99 协议实现和串口诊断工具。
+蓝牙遥控器、Rust/Windows Xbox 手柄中继器、通用 C99 协议实现和串口诊断工具。
 
 ## 目录
 
 ```text
 android/  Android 遥控器、协议文档、固件示例和诊断工具
-pc/       Windows Xbox 手柄中继器
+pc/       Windows Xbox 手柄中继器（推荐 Rust 版，保留 Python 兼容版）
 ```
 
 两个客户端发送兼容的 V4 `CONTROL` / `PRO_CONTROL` 数据帧，可通过 BLE GATT FFE1、
@@ -18,6 +18,7 @@ Bluetooth SPP 或串口连接下位机。协议细节见
 
 - Android 遥控器：[android/README.md](android/README.md)
 - PC 手柄中继器：[pc/README.md](pc/README.md)
+- Rust PC 版：[pc/rust/README.md](pc/rust/README.md)
 - MCU 固件接入：[android/firmware/README.md](android/firmware/README.md)
 
 ## 安全说明

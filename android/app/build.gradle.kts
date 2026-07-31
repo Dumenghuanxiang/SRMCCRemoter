@@ -26,7 +26,10 @@ android {
         versionName = "1.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
+
+    androidResources.localeFilters += listOf("zh")
 
     buildTypes {
         release {

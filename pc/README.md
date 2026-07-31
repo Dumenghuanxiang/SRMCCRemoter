@@ -1,5 +1,20 @@
 # SRM Xbox Bridge
 
+## Rust 正式版（推荐）
+
+[`rust/`](rust/) 是体积更小的原生 Windows 重写版，使用 XInput、WinRT BLE GATT FFE1
+和 Win32 UI，不依赖 Python 或 Qt。正式 GUI 约 0.17 MiB（UPX 压缩后），包含手柄探测、
+BLE 扫描与连接、SRM v4 `PRO_CONTROL`、自动重连和实时状态显示。
+
+```powershell
+cd rust
+.\build.ps1
+```
+
+构建要求和 CLI 调试工具见 [Rust 版说明](rust/README.md)。
+
+## Python 兼容版
+
 这是一个 Windows PC 中继程序：直接通过系统 XInput 读取 Xbox 手柄，把完整状态编码成
 “SRM校内赛”v4 `PRO_CONTROL` 帧，再经 BLE GATT FFE1 或串口发送给从机。
 

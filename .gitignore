@@ -35,6 +35,10 @@ __pycache__/
 dist/
 runtime/
 
+# Rust
+**/target/
+smoke-report.json
+
 # Generated reports and captures
 *-report*.json
 control_samples.csv

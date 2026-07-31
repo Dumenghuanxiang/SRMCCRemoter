@@ -1,0 +1,55 @@
+[package]
+name = "srm-xbox"
+version = "1.0.0"
+edition = "2021"
+description = "SRM Xbox bridge: XInput -> SRM v4 PRO_CONTROL -> BLE FFE1 with a small Win32 UI (pure BLE)"
+license = "GPL-3.0-only"
+
+[features]
+default = []
+# CLI debugging tools (--probe / --stream / --smoke-test). Kept out of the
+# GUI exe so serde_json and the tooling code never enter the shipped binary.
+cli-tools = ["dep:serde", "dep:serde_json"]
+
+[lib]
+name = "srm_xbox"
+path = "src/lib.rs"
+
+[[bin]]
+name = "srm-xbox"
+path = "src/main.rs"
+
+[[bin]]
+name = "srm-xbox-tools"
+path = "src/tools.rs"
+required-features = ["cli-tools"]
+
+[dependencies]
+windows = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Dwm",
+    "Win32_Graphics_Gdi",
+    "Win32_System_Com",
+    "Win32_System_SystemInformation",
+    "Win32_System_LibraryLoader",
+    "Win32_UI_Controls",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+    "Devices_Bluetooth",
+    "Devices_Bluetooth_Advertisement",
+    "Devices_Bluetooth_GenericAttributeProfile",
+    "Foundation",
+    "Storage_Streams",
+] }
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = "symbols"
+panic = "abort"
+
+
+
