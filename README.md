@@ -10,8 +10,9 @@ android/  Android 遥控器、协议文档、固件示例和诊断工具
 pc/       Windows Xbox 手柄中继器（推荐 Rust 版，保留 Python 兼容版）
 ```
 
-两个客户端发送兼容的 V4 `CONTROL` / `PRO_CONTROL` 数据帧，可通过 BLE GATT FFE1、
-Bluetooth SPP 或串口连接下位机。协议细节见
+三套客户端实现均发送兼容的 V4 `CONTROL` / `PRO_CONTROL` 数据帧：Android 版支持
+BLE GATT FFE1 和 Bluetooth SPP，Rust PC 版支持 BLE GATT FFE1，Python PC 兼容版支持
+BLE GATT FFE1 和串口。协议细节见
 [通信协议](android/docs/SRM_CAMPUS_COMPETITION_PROTOCOL.md)。
 
 ## 快速开始

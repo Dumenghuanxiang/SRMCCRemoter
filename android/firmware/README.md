@@ -39,9 +39,11 @@ firmware/
 ## 桌面测试
 
 使用 GCC 可直接验证与硬件无关的代码。仓库测试还包含一个最小 STM32 HAL 模拟层，
-用于验证 DMA 环形接收和 UART 错误恢复行为。
+用于验证 DMA 环形接收和 UART 错误恢复行为。以下命令从仓库根目录开始执行，第一行会
+进入 `android/` 目录：
 
 ```powershell
+Set-Location android
 New-Item -ItemType Directory -Force build | Out-Null
 
 gcc -std=c99 -Wall -Wextra -Werror -Ifirmware `

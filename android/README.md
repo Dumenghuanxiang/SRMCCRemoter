@@ -30,7 +30,8 @@ tools/      PC 串口采样分析工具
 
 ## 构建 App
 
-构建环境需要 Android SDK 36 和 JDK 21 或更新版本；Gradle 9.5.0 由 Wrapper 提供。
+构建环境需要 Android SDK 36.1 和 JDK 21 或更新版本；目标 API 仍为 36，Gradle 9.5.0
+由 Wrapper 提供。
 使用 Android Studio 打开仓库，或在 Windows PowerShell 中执行：
 
 ```powershell

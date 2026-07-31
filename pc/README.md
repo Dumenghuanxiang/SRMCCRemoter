@@ -25,22 +25,24 @@ Xbox 手柄 -> Windows XInput -> SRM v4 PRO_CONTROL -> BLE FFE1 / COM -> 蓝牙�
 实现规格：Python 3.10+、原生 XInput、Bleak、PySerial。程序不依赖 pygame、SDL 或手柄
 模拟驱动。
 
-## 图形版 EXE
+## 构建图形版 EXE
 
-已经打包的图形程序位于：
+在 PowerShell 中运行构建脚本：
+
+```powershell
+.\build_exe.ps1
+```
+
+构建成功后，图形程序生成于：
 
 ```text
 dist\SRMXbox.exe
 ```
 
-直接双击即可运行，无需安装 Python。窗口内可以扫描 BLE 设备、选择串口和 XInput 手柄、
-调整频率/死区/扳机阈值，并实时查看双摇杆、ABXY、肩键、扳机、摇杆按压、十字键和通信日志。
-
-需要重新构建时，在 PowerShell 中运行：
-
-```powershell
-.\build_exe.ps1
-```
+生成的 EXE 可直接双击运行，无需在目标机器上安装 Python。窗口内可以扫描 BLE 设备、
+选择串口和 XInput 手柄、调整频率/死区/扳机阈值，并实时查看双摇杆、ABXY、肩键、
+扳机、摇杆按压、十字键和通信日志。`dist/` 是本地构建目录，不纳入源码仓库；当前
+GitHub Release 提供的是推荐的 Rust 正式版二进制。
 
 构建脚本会安装 `requirements-build.txt` 中的 Qt for Python 和 PyInstaller，生成单文件、
 无控制台窗口的 `dist\SRMXbox.exe`，并自动执行下述成品自检。自检失败时构建脚本返回失败。
@@ -59,7 +61,7 @@ dist\SRMXbox.exe
 
 ## 1. 环境准备
 
-源码运行要求 Windows 10/11、Python 3.10 或更新版本、可用的蓝牙适配器；已打包的 EXE
+源码运行要求 Windows 10/11、Python 3.10 或更新版本、可用的蓝牙适配器；构建后的 EXE
 不需要安装 Python。EXE 目前面向 64 位 Windows 10/11，不能直接当作 Linux、macOS 或
 ARM Windows 程序使用；目标机器仍需要对应的蓝牙/串口驱动和 XInput 手柄。先将 Xbox 手柄通过
 USB、Xbox Wireless Adapter 或系统蓝牙连接到 PC；XInput 控制器编号通常是 `0`。

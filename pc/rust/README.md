@@ -49,8 +49,8 @@ cargo build --release --features cli-tools --locked
 
 ```powershell
 .\target\release\srm-xbox-tools.exe --smoke-test .\smoke-report.json
-.\target\release\srm-xbox-tools.exe --probe 00:55:44:5E:19:13 .\probe-report.json
-.\target\release\srm-xbox-tools.exe --stream 00:55:44:5E:19:13 8 .\stream-report.json
+.\target\release\srm-xbox-tools.exe --probe AA:BB:CC:DD:EE:FF .\probe-report.json
+.\target\release\srm-xbox-tools.exe --stream AA:BB:CC:DD:EE:FF 8 .\stream-report.json
 ```
 
 ## 已知限制
