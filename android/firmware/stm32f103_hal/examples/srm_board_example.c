@@ -1,5 +1,5 @@
 #include "main.h"
-#include "srm_stm32f103_port.h"
+#include "srm_remote.h"
 
 #include <string.h>
 
@@ -24,7 +24,7 @@ void SRM_BoardApplyControl(const srm_control_state_t *state) {
     __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, axis_to_servo_us(state->right_x));
     __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, axis_to_servo_us(state->right_y));
 
-    /* Blue Pill 的 PC13 LED 通常低电平点亮；这里只把 A 键作为可视化示范。 */
+    /* 常见开发板的 PC13 LED 通常低电平点亮；这里只把 A 键作为可视化示范。 */
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13,
             (state->buttons & 0x01u) != 0u ? GPIO_PIN_RESET : GPIO_PIN_SET);
 

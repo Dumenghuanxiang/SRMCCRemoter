@@ -6,7 +6,7 @@
 
 1. 先阅读 [`../docs/SRM_CAMPUS_COMPETITION_PROTOCOL.md`](../docs/SRM_CAMPUS_COMPETITION_PROTOCOL.md)，确认帧格式和控制位。
 2. STM32F103 用户直接阅读 [`stm32f103_hal/README.md`](stm32f103_hal/README.md)。
-3. 将 `srm_protocol.c/.h`、`srm_mcu_example.c/.h` 和 STM32 适配层加入 CubeIDE。
+3. 将 `srm_protocol.c/.h`、`stm32f103_hal/srm_uart.c/.h` 和 `stm32f103_hal/srm_remote.c/.h` 加入 CubeIDE。
 4. 先用 App 默认设置发送 `PING` 验证双向链路，再实现板级输出映射。例程兼容无换行、LF 和 CRLF。
 
 ## 目录
@@ -14,15 +14,15 @@
 ```text
 firmware/
   srm_protocol.c/.h                 v4 流式协议、CRC、两类 CONTROL 编解码
-  srm_mcu_example.c/.h              消息分发、ACK/ERROR、失联保护
+  stm32f103_hal/srm_uart.c/.h       STM32F103 UART/DMA 底层适配
+  stm32f103_hal/srm_remote.c/.h     遥控器协议解码与失联保护
   stm32f103_hal/
-    srm_stm32f103_port.c/.h          USART + DMA Circular HAL 适配
+    srm_uart.c/.h                    USART + DMA Circular HAL 适配
+    srm_remote.c/.h                  遥控器协议与用户回调
     README.md                        CubeMX、接线、移植和排错教学
     examples/srm_board_example.c     PWM、LED、DEBUG 教学映射
   tests/
     srm_protocol_test.c              协议向量与错误帧测试
-    srm_mcu_example_test.c           通用 MCU 行为测试
-    srm_stm32f103_port_test.c        DMA、超时、ACK、错误恢复测试
 ```
 
 ## 设计边界
@@ -51,19 +51,6 @@ gcc -std=c99 -Wall -Wextra -Werror -Ifirmware `
   -o build/srm_protocol_test.exe
 .\build\srm_protocol_test.exe
 
-gcc -std=c99 -Wall -Wextra -Werror -Ifirmware `
-  firmware/srm_protocol.c firmware/srm_mcu_example.c `
-  firmware/tests/srm_mcu_example_test.c `
-  -o build/srm_mcu_example_test.exe
-.\build\srm_mcu_example_test.exe
-
-gcc -std=c99 -Wall -Wextra -Werror `
-  -Ifirmware -Ifirmware/stm32f103_hal -Ifirmware/tests `
-  firmware/srm_protocol.c firmware/srm_mcu_example.c `
-  firmware/stm32f103_hal/srm_stm32f103_port.c `
-  firmware/tests/srm_stm32f103_port_test.c `
-  -o build/srm_stm32f103_port_test.exe
-.\build\srm_stm32f103_port_test.exe
 ```
 
 目标平台仍应使用 STM32CubeIDE 自己工程中的正式 STM32F1 HAL 源码完成最终构建和烧录。

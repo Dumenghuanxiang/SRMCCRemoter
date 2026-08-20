@@ -1,7 +1,7 @@
 # STM32F103 HAL 适配例程与教学
 
-本目录把“SRM校内赛”协议 v4 接入 STM32F103。示例面向 STM32CubeMX / STM32CubeIDE、
-STM32F103C8T6（Blue Pill）和 STM32F1 HAL，默认使用 `USART1 + RX DMA Circular` 接收
+本目录把“SRM校内赛”协议 v4 接入 STM32F103RCT6。示例面向 STM32CubeMX / STM32CubeIDE、
+STM32F103RCT6 和 STM32F1 HAL，默认使用 `USART1 + RX DMA Circular` 接收
 JDY-31 的连续串口字节流。协议层不使用动态内存，也不把任何输入定义成前进、转向或
 其他具体动作；实际语义只在板级回调中决定。
 
@@ -10,8 +10,8 @@ JDY-31 的连续串口字节流。协议层不使用动态内存，也不把任�
 | 文件 | 作用 |
 |---|---|
 | `../srm_protocol.c/.h` | v4 帧同步、CRC-8/ATM、CONTROL/PRO_CONTROL 解码 |
-| `../srm_mcu_example.c/.h` | 消息分发、ACK/ERROR、600 ms 失联保护 |
-| `srm_stm32f103_port.c/.h` | STM32F103 HAL、DMA、UART 回包与板级回调 |
+| `srm_uart.c/.h` | 底层 STM32F103 HAL、DMA、UART 发送和错误重启 |
+| `srm_remote.c/.h` | 上层协议解码、ACK/ERROR、600 ms 失联保护和用户回调 |
 | `examples/srm_board_example.c` | 四轴 PWM 与 PC13 LED 教学映射 |
 
 ## 2. 硬件接线
@@ -30,7 +30,7 @@ STM32F103 与 JDY-31 的 UART 逻辑应为 3.3 V。不要因为某些转接底�
 
 ## 3. CubeMX 配置
 
-1. 新建 STM32F103C8Tx 工程，`SYS -> Debug` 选择 `Serial Wire`。
+1. 新建 STM32F103RCTx 工程，`SYS -> Debug` 选择 `Serial Wire`。
 2. 启用 `USART1 -> Asynchronous`。
 3. 设置与 JDY-31 完全一致的串口参数：
    - Baud Rate：先用 `9600` 验证；双方都修改成功后可用 `115200`。
@@ -58,10 +58,10 @@ Transfer Complete 中断。UART 错误中断仍应保留。
 ```text
 firmware/srm_protocol.c
 firmware/srm_protocol.h
-firmware/srm_mcu_example.c
-firmware/srm_mcu_example.h
-firmware/stm32f103_hal/srm_stm32f103_port.c
-firmware/stm32f103_hal/srm_stm32f103_port.h
+firmware/stm32f103_hal/srm_uart.c
+firmware/stm32f103_hal/srm_uart.h
+firmware/stm32f103_hal/srm_remote.c
+firmware/stm32f103_hal/srm_remote.h
 ```
 
 头文件搜索路径至少包含 `firmware` 和 `firmware/stm32f103_hal`。
@@ -71,19 +71,19 @@ firmware/stm32f103_hal/srm_stm32f103_port.h
 在 `main.c` 的 USER CODE Includes 区加入：
 
 ```c
-#include "srm_stm32f103_port.h"
+#include "srm_remote.h"
 ```
 
-所有 CubeMX 外设初始化完成后启动协议。JDY-31 使用 App 默认 BLE FFE1 时传
-`SRM_TRANSPORT_BLE_FFE1`；只有确认使用实验性经典蓝牙 SPP 时才传
-`SRM_TRANSPORT_SPP`。
+所有 CubeMX 外设初始化完成后启动协议。初始化函数内部完成协议和 DMA 初始化：
 
 ```c
 MX_GPIO_Init();
 MX_DMA_Init();
 MX_USART1_UART_Init();
 
-if (SRM_STM32_Init(&huart1, SRM_TRANSPORT_BLE_FFE1) != HAL_OK) {
+static srm_remote_t remote;
+remote = SRM_Remote_Init(&huart1);
+if (remote.init_status != HAL_OK) {
     Error_Handler();
 }
 ```
@@ -92,7 +92,7 @@ if (SRM_STM32_Init(&huart1, SRM_TRANSPORT_BLE_FFE1) != HAL_OK) {
 
 ```c
 while (1) {
-    SRM_STM32_Poll();
+    SRM_Remote_Poll(&remote);
 
     /* 其他任务必须非阻塞，或拆成短时间片。 */
 }
@@ -110,11 +110,11 @@ void USART1_IRQHandler(void) {
 
 ```c
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart) {
-    SRM_STM32_OnUartError(huart);
+    SRM_Remote_OnUartError(&remote, huart);
 }
 ```
 
-错误回调只设置标志，DMA 停止和重启在下一次 `SRM_STM32_Poll()` 中进行，避免在中断里
+错误回调只设置标志，DMA 停止和重启在下一次 `SRM_Remote_Poll()` 中进行，避免在中断里
 执行复杂逻辑。
 
 ## 6. 实现板级控制
@@ -143,7 +143,7 @@ void SRM_BoardApplyProControl(const srm_pro_control_state_t *state) {
 `examples/srm_board_example.c` 演示了：
 
 - 四个 `int16_t` 容器中的 10-bit 轴映射到 TIM2 CH1..CH4 的 1000..2000 us PWM；
-- A 键控制 Blue Pill PC13 LED；
+- A 键控制 PC13 LED；
 - `PING`、`LED=1`、`LED=0` 调试命令。
 
 这是教学映射，不应不经检查直接接入电机或功率负载。
@@ -164,7 +164,7 @@ HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 ## 7. DMA 设计与实时性
 
 UART、BLE 和 SPP 都是连续字节流。一次 DMA 更新可能只有半帧，也可能包含多帧，因此
-`SRM_STM32_Poll()` 会把每个新字节依次送入流式解析器。
+`SRM_Remote_Poll()` 会把每个新字节依次送入流式解析器。
 
 256 字节缓存可覆盖的最坏时间：
 
@@ -208,7 +208,7 @@ uint8_t SRM_BoardHandleDebug(const uint8_t *data, uint8_t length) {
 
 1. 暂时不要连接电机，只连接 UART 和共地。
 2. JDY-31 与 USART1 都设为 9600 8N1。
-3. 下载固件，确认 `SRM_STM32_Init()` 返回 `HAL_OK`。
+3. 下载固件，确认 `SRM_Remote_Init()` 返回对象的 `init_status` 为 `HAL_OK`。
 4. App 不连接蓝牙时先验证本地回环；随后扫描并连接 JDY-31。
 5. 保持 App 默认“调试指令自动换行”开启并发送 `PING`。收到 ACK 说明带 LF 的下行、解析、CRC 和上行都已工作。
 6. 在调试器观察 `current_state`，逐个操作摇杆、ABXY、十字键和 S1..S6。
@@ -223,7 +223,7 @@ uint8_t SRM_BoardHandleDebug(const uint8_t *data, uint8_t length) {
 - 检查 TX/RX 是否交叉、是否共地；
 - 检查 `huart1.hdmarx` 不为空，DMA Mode 是否为 Circular；
 - 检查 JDY-31 与 STM32 的波特率、数据位、校验位和停止位是否一致；
-- 观察 `SRM_STM32_CopyStats()` 的 `rx_bytes` 是否增长。
+- 观察 `SRM_Remote_Stats(&remote)->rx_bytes` 是否增长。
 
 ### rx_bytes 增长但状态不更新
 
@@ -265,20 +265,20 @@ JDY-31 参数修改与 STM32 CubeMX 配置必须一致。先用 USB-UART 单独�
 
 ## 12. 无 DMA 时的逐字节中断备选
 
-资源紧张或暂时不想配置 DMA 时，可以直接使用通用 MCU 层。不要同时编译
-`srm_stm32f103_port.c`，而是在自己的平台文件中实现四个 `srm_platform_*` 函数：
+本例程要求使用 RX DMA Circular；若改用逐字节中断，应在底层 UART 层实现同样的
+`srm_uart_rx_callback_t` 回调，不要在中断中执行协议解析或板级输出：
 
 ```c
 static uint8_t uart_rx_byte;
 
 void protocol_it_init(void) {
-    srm_mcu_init(HAL_GetTick(), SRM_TRANSPORT_BLE_FFE1);
+    srm_parser_init(&remote.parser);
     HAL_UART_Receive_IT(&huart1, &uart_rx_byte, 1u);
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart == &huart1) {
-        srm_mcu_rx_byte(uart_rx_byte, HAL_GetTick());
+        /* 由 SRM_Remote_Poll 的同一个回调喂入 remote.parser。 */
         HAL_UART_Receive_IT(&huart1, &uart_rx_byte, 1u);
     }
 }
@@ -291,7 +291,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart) {
 
 /* main while(1) 中持续调用。 */
 void protocol_it_poll(void) {
-    srm_mcu_periodic(HAL_GetTick());
+    SRM_Remote_Poll(&remote);
 }
 ```
 
